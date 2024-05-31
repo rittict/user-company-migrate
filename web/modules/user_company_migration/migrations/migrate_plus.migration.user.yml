@@ -1,0 +1,47 @@
+id: user_migration
+label: 'User migration'
+migration_group: default
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls: 'https://jsonplaceholder.typicode.com/users'
+  item_selector: '/users'
+  fields:
+    - name: id
+      label: 'User ID'
+    - name: name
+      label: 'Name'
+    - name: username
+      label: 'Username'
+    - name: email
+      label: 'Email'
+    - name: phone
+      label: 'Phone'
+    - name: website
+      label: 'Website'
+    - name: company
+      label: 'Company'
+  ids:
+    id:
+      type: integer
+process:
+  type:
+    plugin: default_value
+    default_value: user
+  title: name
+  field_username: username
+  field_email: email
+  field_phone: phone
+  field_website: website
+  field_company:
+    plugin: migration_lookup
+    migration: company_migration
+    source: company
+destination:
+  plugin: 'entity:node'
+  default_bundle: user
+migration_dependencies:
+  required:
+    - user_company_migration
+

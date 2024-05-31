@@ -1,0 +1,7 @@
+user_company_migration.user_company_page:
+  path: '/user-company'
+  defaults:
+    _controller: '\Drupal\user_company_migration\Controller\UserCompanyController::userCompanyPage'
+    _title: 'User and Company'
+  requirements:
+    _permission: 'access content'

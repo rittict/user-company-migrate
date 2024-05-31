@@ -1,0 +1,8 @@
+name: 'User Company Migration'
+type: module
+description: 'Migrate users and companies from JSON endpoint.'
+package: Custom
+core_version_requirement: ^10
+dependencies:
+  - drupal:migrate
+  - drupal:migrate_plus

@@ -1,0 +1,28 @@
+id: company_migration
+label: 'Company migration'
+migration_group: default
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls: https://jsonplaceholder.typicode.com/users
+  item_selector: '[*].company'
+  fields:
+    - name: name
+      label: 'Company Name'
+    - name: catchPhrase
+      label: 'Catch Phrase'
+    - name: bs
+      label: 'BS'
+  ids:
+    name:
+      type: string
+process:
+  type: company
+  title: name
+  field_name: name
+  field_catch_phrase: catchPhrase
+  field_bs: bs
+destination:
+  plugin: entity:node
+dependencies: null

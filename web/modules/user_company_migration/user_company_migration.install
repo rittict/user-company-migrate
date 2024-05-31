@@ -1,0 +1,74 @@
+<?php
+
+use Drupal\node\Entity\NodeType;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\entity_reference_revisions\Entity\EntityReferenceRevisionsFieldStorage;
+
+/**
+ * Implements hook_install().
+ */
+function user_company_migration_install() {
+  // Create User content type.
+  if (!NodeType::load('user')) {
+    $node_type = NodeType::create([
+      'type' => 'user',
+      'name' => 'User',
+    ]);
+    $node_type->save();
+
+    // Add fields to User content type.
+    $fields = [
+      'field_name' => 'text',
+      'field_username' => 'text',
+      'field_email' => 'email',
+      'field_phone' => 'text',
+      'field_website' => 'link',
+      'field_company' => 'entity_reference',
+    ];
+
+    foreach ($fields as $field_name => $field_type) {
+      FieldStorageConfig::create([
+        'field_name' => $field_name,
+        'entity_type' => 'node',
+        'type' => $field_type,
+      ])->save();
+
+      FieldConfig::create([
+        'field_storage' => FieldStorageConfig::loadByName('node', $field_name),
+        'bundle' => 'user',
+        'label' => ucwords(str_replace('_', ' ', $field_name)),
+      ])->save();
+    }
+  }
+
+  // Create Company content type.
+  if (!NodeType::load('company')) {
+    $node_type = NodeType::create([
+      'type' => 'company',
+      'name' => 'Company',
+    ]);
+    $node_type->save();
+
+    // Add fields to Company content type.
+    $fields = [
+      'field_company_name' => 'text',
+      'field_catch_phrase' => 'text',
+      'field_bs' => 'text',
+    ];
+
+    foreach ($fields as $field_name => $field_type) {
+      FieldStorageConfig::create([
+        'field_company_name' => $field_name,
+        'entity_type' => 'node',
+        'type' => $field_type,
+      ])->save();
+
+      FieldConfig::create([
+        'field_storage' => FieldStorageConfig::loadByName('node', $field_name),
+        'bundle' => 'company',
+        'label' => ucwords(str_replace('_', ' ', $field_name)),
+      ])->save();
+    }
+  }
+}
